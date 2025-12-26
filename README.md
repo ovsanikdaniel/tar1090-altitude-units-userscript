@@ -2,7 +2,7 @@
 
 A Tampermonkey userscript for **tar1090-based ADS-B UIs** (including **globe.adsbexchange.com**) that normalizes the altitude display in the sidebar:
 
-- Forces altitude to: **`xxx ft (xxx m)`**
+- Forces altitude to: **`xxx ft / xxx m`**
 - Preserves climb/descent arrows **▲ / ▼** (when present in the source text)
 - Renames the altitude label (`selected_altitude1_title`) to **`Baro`**
 - Designed for fast-updating SPA pages (keeps re-applying formatting)
