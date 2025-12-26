@@ -38,54 +38,40 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 (function () {
   'use strict';
 
-  // --- Config ---
   const ALT_ID = 'selected_altitude1';
   const ALT_TITLE_ID = 'selected_altitude1_title';
   const ALT_TITLE_TEXT = 'Baro';
 
-  // ADSBx často používa úzku nedeliteľnú medzeru medzi číslom a jednotkou.
-  const NNBSP = '\u202F';
+  const NNBSP = '\u202F'; // narrow no-break space
 
-  // Interval je zámerný: stránka je SPA a hodnoty môžu byť často prepisované.
-  const APPLY_INTERVAL_MS = 300;
-
-  // --- Helpers ---
   function parseNumber(raw) {
     if (!raw) return NaN;
-
-    // odstráň whitespace vrátane NBSP/NNBSP
     let s = String(raw).trim().replace(/[\s\u00A0\u202F]/g, '');
-
-    // "12,5" -> "12.5"
     if (s.includes(',') && !s.includes('.')) s = s.replace(',', '.');
-
-    // odstráň tisícové oddeľovače (čiarky)
     s = s.replace(/,/g, '');
-
-    // ak by bolo viac bodiek, nechaj poslednú ako desatinnú
     const dotCount = (s.match(/\./g) || []).length;
     if (dotCount > 1) {
       const parts = s.split('.');
       const last = parts.pop();
       s = parts.join('') + '.' + last;
     }
-
     return Number.parseFloat(s);
   }
 
-  function fmtInt(n) {
-    return String(Math.round(n));
-  }
+  const fmtInt = (n) => String(Math.round(n));
 
   function stripAddon(text) {
-    // odstráni existujúce "(#### m)" alebo "(#### ft)" aby sa to nezdvojovalo
+    // odstráni existujúci doplnok v tvare:
+    // - "(#### m)" alebo "(#### ft)"
+    // - "/ #### m" alebo "/ #### ft"
     return String(text)
       .replace(/\s*\(\s*[-\d.,\s\u00A0\u202F]+\s*(?:ft|m)\s*\)\s*/gi, ' ')
+      .replace(/\s*\/\s*[-\d.,\s\u00A0\u202F]+\s*(?:ft|m)\s*/gi, ' ')
       .replace(/\s{2,}/g, ' ')
       .trim();
   }
 
-  function formatFtM(text) {
+  function formatFtSlashM(text) {
     // voliteľná šípka ▲/▼ + číslo + jednotka ft|m
     const rx = /([▲▼]\s*)?(-?\d[\d.,\s\u00A0\u202F]*)([\s\u00A0\u202F]*)(ft|m)\b/i;
 
@@ -103,11 +89,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
         ft = m / 0.3048;
       }
 
-      return `${arrow}${fmtInt(ft)}${NNBSP}ft (${fmtInt(m)}${NNBSP}m)`;
+      // požadovaný výstup: "xxx ft / xxx m"
+      return `${arrow}${fmtInt(ft)}${NNBSP}ft / ${fmtInt(m)}${NNBSP}m`;
     });
   }
 
-  // --- Main ---
   function apply() {
     // 1) Prepíš title na "Baro"
     const titleEl = document.getElementById(ALT_TITLE_ID);
@@ -115,27 +101,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
       titleEl.textContent = ALT_TITLE_TEXT;
     }
 
-    // 2) Prepíš výšku na "ft (m)"
+    // 2) Prepíš výšku na "ft / m"
     const altEl = document.getElementById(ALT_ID);
     if (!altEl) return;
 
     const raw = altEl.textContent ?? '';
     const cleaned = stripAddon(raw);
-    const updated = formatFtM(cleaned);
+    const updated = formatFtSlashM(cleaned);
 
-    if (updated !== raw) {
-      altEl.textContent = updated;
-    }
+    if (updated !== raw) altEl.textContent = updated;
   }
 
-  // SPA/aktualizácie: reaguj na DOM zmeny + poistka intervalom
   const mo = new MutationObserver(apply);
-  mo.observe(document.documentElement, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
+  mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
 
-  setInterval(apply, APPLY_INTERVAL_MS);
+  setInterval(apply, 300);
   apply();
 })();
