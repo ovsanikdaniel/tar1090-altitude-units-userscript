@@ -7,15 +7,11 @@ A Tampermonkey userscript for **tar1090-based ADS-B UIs** (including **globe.ads
 - Renames the altitude label (`selected_altitude1_title`) to **`Baro`**
 - Designed for fast-updating SPA pages (keeps re-applying formatting)
 
----
-
 ## Requirements
 
 - Browser: Chrome / Edge / Firefox
 - Userscript manager: **Tampermonkey**  
   https://www.tampermonkey.net/
-
----
 
 ## Installation
 
@@ -27,9 +23,7 @@ A Tampermonkey userscript for **tar1090-based ADS-B UIs** (including **globe.ads
 
 Tip: Once `@downloadURL` / `@updateURL` point to the GitHub *raw* file, Tampermonkey can auto-update the script.
 
----
-
-## Supported Sites (Where the Script Works)
+## Supported Sites
 
 This script works on **tar1090-style** aircraft tracking pages that expose these sidebar elements:
 
@@ -45,8 +39,6 @@ It will also typically work on self-hosted tar1090 instances, for example:
 
 If a site does not use the same element IDs or DOM structure, the script will not apply until adjusted.
 
----
-
 ## Adding More Sites
 
 You can add additional URLs in two ways:
@@ -55,7 +47,14 @@ You can add additional URLs in two ways:
 
 Open `src/adsbx-baro-altitude.user.js` and add more `@match` lines, e.g.:
 
-```js
+~~~js
 // @match        https://globe.adsbexchange.com/*
 // @match        https://tar1090.example.com/*
 // @match        http://192.168.1.50:8080/*
+~~~
+
+## Donations
+
+If you find this useful and want to support development:
+ - BTC: bc1qpl78800mkup2z8f98v4hvymc0cly9x2e8pftp7
+ - LTC: ltc1qpyvhd9swhakzx266whmzs7pmx9l5dmv3h09mgk
