@@ -1,14 +1,11 @@
 // ==UserScript==
 // @name         ADSBexchange: Baro label + altitude ft (m)
-// @name:sk      ADSBexchange: Baro popis + výška ft (m)
 // @namespace    https://github.com/ovsanikdaniel/tar1090-altitude-units-userscript
-// @version      1.0.0
+// @version      1.0.0.1
 // @description  Forces sidebar altitude to show as "xxx ft (xxx m)" and renames selected_altitude1_title to "Baro" on globe.adsbexchange.com.
-// @description:sk V sidebare vynúti formát výšky "xxx ft (xxx m)" a prepíše selected_altitude1_title na "Baro" na globe.adsbexchange.com.
 // @author       Daniel Ovšanik
 // @license      MIT
 // @match        https://globe.adsbexchange.com/*
-// @match        https://*.adsbexchange.com/*
 // @run-at       document-end
 // @grant        none
 // @homepageURL  https://github.com/ovsanikdaniel/tar1090-altitude-units-userscript
