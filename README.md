@@ -1,4 +1,4 @@
-# tar1090 Altitude Units Userscript (ft + m) — “Baro” Label
+# tar1090 Custom altitude Units (ft + m)
 
 A Tampermonkey userscript for **tar1090-based ADS-B UIs** (including **globe.adsbexchange.com**) that normalizes the altitude display in the sidebar:
 
